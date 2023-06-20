@@ -1,0 +1,16 @@
+micronaut:
+  application:
+    name: nosqlexample
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+mongodb:
+
+  uri: mongodb://root:test1234@localhost:27017/fruit?authSource=admin
+  username: root
+  password: test1234
+  collections:
+    - fruit
+
