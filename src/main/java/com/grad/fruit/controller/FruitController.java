@@ -9,15 +9,23 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import lombok.RequiredArgsConstructor;
 
 @Controller("/fruit")
 @RequiredArgsConstructor
+@Secured(SecurityRule.IS_AUTHENTICATED)
 public class FruitController {
 
     private final FruitService fruitService;
 
-    @Get
+    @Get("seccheck")
+    String index() {
+        return "sherlock";
+    }
+
+    @Get(consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     public Iterable<Fruit> findAll() {
         return fruitService.findAll();
     }
@@ -37,9 +45,8 @@ public class FruitController {
         fruitService.deleteById(id);
     }
 
-
     @Get(value = "/{name}/name", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
-    public Fruit findFruitByName(@PathVariable String name){
+    public Fruit findFruitByName(@PathVariable String name) {
         return fruitService.findFruitByName(name);
     }
 
