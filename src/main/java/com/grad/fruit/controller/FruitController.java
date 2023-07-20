@@ -13,18 +13,29 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.Size;
+
 @Controller("/fruit")
 @RequiredArgsConstructor
 @Secured(SecurityRule.IS_AUTHENTICATED)
+
 public class FruitController {
 
     private final FruitService fruitService;
 
-    @Get("seccheck")
-    String index() {
-        return "sherlock";
+    @Get("/noauth")
+    @Secured(SecurityRule.IS_ANONYMOUS)
+    String noAuth() {
+        return "no auth";
     }
 
+    @Get("/yesauth")
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    String yesAuth() {
+        return "yes auth";
+    }
+
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Get(consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     public Iterable<Fruit> findAll() {
         return fruitService.findAll();
@@ -46,7 +57,7 @@ public class FruitController {
     }
 
     @Get(value = "/{name}/name", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
-    public Fruit findFruitByName(@PathVariable String name) {
+    public Fruit findFruitByName(@PathVariable @Size(min=3) String name) {
         return fruitService.findFruitByName(name);
     }
 

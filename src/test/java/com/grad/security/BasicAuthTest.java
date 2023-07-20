@@ -1,5 +1,6 @@
 package com.grad.security;
 
+import com.grad.fruit.domain.Fruit;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -11,6 +12,8 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+
+import java.util.List;
 
 import static io.micronaut.http.HttpStatus.OK;
 import static io.micronaut.http.HttpStatus.UNAUTHORIZED;
@@ -31,9 +34,9 @@ class BasicAuthTest {
 
 
     @Test
-    void verifyHttpBasicAuthWorks() {
+    void verifyHttpBasicAuthWorksWithoutAuth() {
 //        when: 'Accessing a secured URL without authenticating'
-        Executable e = () -> client.toBlocking().exchange(HttpRequest.GET("/fruit").accept(MediaType.APPLICATION_JSON));
+        Executable e = () -> client.toBlocking().exchange(HttpRequest.GET("fruit").accept(MediaType.APPLICATION_JSON));
 
 //         then: 'returns unauthorized'
         HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, e);
@@ -42,14 +45,18 @@ class BasicAuthTest {
         assertTrue(thrown.getResponse().getHeaders().contains("WWW-Authenticate"));
         assertEquals("Basic realm=\"Micronaut Guide\"", thrown.getResponse().getHeaders().get("WWW-Authenticate"));
 
+    }
+
+    @Test
+    void verifyHttpBasicAuthWorks() {
         //when: 'A secured URL is accessed with Basic Auth'
-        HttpResponse<String> rsp = client.toBlocking().exchange(HttpRequest.GET("fruit/seccheck")
-                        .accept(APPLICATION_JSON)
+        HttpResponse<String> rsp = client.toBlocking().exchange(HttpRequest.GET("fruit/yesauth")
+                        .accept(MediaType.APPLICATION_JSON)
                         .basicAuth("sherlock", "password"),
                 String.class);
         //then: 'the endpoint can be accessed'
         assertEquals(OK, rsp.getStatus());
-        assertEquals("sherlock", rsp.getBody().get());
+        assertEquals("yes auth", rsp.getBody().get());
     }
 
 }

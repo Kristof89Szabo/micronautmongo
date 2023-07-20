@@ -28,6 +28,6 @@ public class FruitService {
     }
 
     public Fruit findFruitByName(String name) {
-        return fruitRepository.findFruitByName(name).orElseThrow( () -> new RuntimeException("Could not find fruit under: " + name));
+        return fruitRepository.findByName(name).orElseThrow( () -> new RuntimeException("Could not find fruit under: " + name));
     }
 }

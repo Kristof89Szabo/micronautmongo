@@ -30,6 +30,27 @@ db.fruit.find({name:"fruitname"})
 db.fruit.find({})
 ```
 
+
+#### Function
+
+- Filter out all the fruit which price is 5.
+```mongodb-json
+db.fruit.aggregate([{$match: {price: 5}}])
+```
+
+- Group the fruit by price and show only the prices:
+```mongodb-json
+db.fruit.aggregate([{$group : {_id:"$price"}  }])
+```
+
+- Group by price and count how many fruit has price 5:
+```mongodb-json
+db.fruit.aggregate([{$match: {price: 5}}, {$count:"quantity of fruit"}])
+```
+
+[READ MORE](https://www.mongodb.com/docs/manual/aggregation/)
+
+
 #### Validation
 
 It creates a "products" collection and sets a validator that requires all documents in the collection to have the "name"
@@ -66,6 +87,15 @@ db.createCollection("products", {
     }
 }
 )
+```
+
+
+### From terminal
+
+You can send request from terminal :
+
+```
+curl -v -u sherlock:password localhost:8080/fruit
 ```
 
 
