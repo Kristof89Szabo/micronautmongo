@@ -1,4 +1,4 @@
-package com.grad;
+package com.grad.controller;
 
 import com.grad.fruit.domain.Color;
 import com.grad.fruit.domain.Fruit;
@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @MicronautTest
-class FruitValidationControllerTest {
+class FruitControllerTest {
 
     @Test
     void fruitIsValid(@Client("/fruit") HttpClient httpClient) {
         //Given
         Color black = new Color("black");
-        Fruit fruit1 = new Fruit("1", "apple", black);
+        Fruit fruit1 = new Fruit("1", "apple", 20, black);
 
         String authHeader = getBasicAuthHeader();
         //When
@@ -44,7 +44,7 @@ class FruitValidationControllerTest {
     @Test
     void fruitNotValid(@Client("/fruit") HttpClient httpClient) {
         //Given
-        Fruit fruit2 = new Fruit("1", "apple", new Color(null));
+        Fruit fruit2 = new Fruit("1", "apple", 20, new Color(null));
         BlockingHttpClient client = httpClient.toBlocking();
         String authHeader = getBasicAuthHeader();
 
@@ -64,4 +64,5 @@ class FruitValidationControllerTest {
         return "Basic " + base64Credentials;
     }
 }
+
 
