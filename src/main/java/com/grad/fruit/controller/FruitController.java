@@ -2,6 +2,7 @@ package com.grad.fruit.controller;
 
 import com.grad.fruit.domain.Fruit;
 import com.grad.fruit.service.FruitService;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -9,16 +10,17 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Status;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 @Controller("/fruit")
 @RequiredArgsConstructor
 @Secured(SecurityRule.IS_AUTHENTICATED)
-
 public class FruitController {
 
     private final FruitService fruitService;
@@ -42,7 +44,8 @@ public class FruitController {
     }
 
     @Post(consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
-    public Fruit save(@Body Fruit fruit) {
+    @Status(HttpStatus.CREATED)
+    public Fruit save(@Body @Valid Fruit fruit) {
         return fruitService.save(fruit);
     }
 
@@ -52,7 +55,7 @@ public class FruitController {
     }
 
     @Delete("/{id}")
-    public void deleteById(@PathVariable String id) {
+    public void deleteById(@PathVariable @Size(min=3) String id) {
         fruitService.deleteById(id);
     }
 
