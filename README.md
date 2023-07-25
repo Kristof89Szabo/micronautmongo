@@ -15,7 +15,7 @@ db.auth("user","password")
 
 ```
  use fruit
- db.fruit.insertOne("alma")
+ db.fruit.insertOne({name:"alma"})
 ```
 
 - Get a specific fruit by name
@@ -29,7 +29,12 @@ db.fruit.find({name:"fruitname"})
 ```
 db.fruit.find({})
 ```
+- Remove fruit
+```
+db.fruit.remove({name:"fruitname"})
+```
 
+[READ MORE](https://www.mongodb.com/docs/manual/reference/method/js-collection/)
 
 #### Function
 
